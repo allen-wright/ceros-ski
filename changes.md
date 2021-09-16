@@ -1,6 +1,6 @@
 # Ceros Challenge Changes
 
-A deployment of my version of the challenge can be found here: https://www.allenwright.dev/ceros
+A production deployment of my version of the challenge can be found here: https://www.allenwright.dev/ceros
 
 ## Jumping
 
