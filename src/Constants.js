@@ -2,10 +2,11 @@ export const GAME_WIDTH = window.innerWidth;
 export const GAME_HEIGHT = window.innerHeight;
 
 export const KEYS = {
-    LEFT : "ArrowLeft",
-    RIGHT : "ArrowRight",
-    UP : "ArrowUp",
-    DOWN : "ArrowDown"
+    LEFT : 'ArrowLeft',
+    RIGHT : 'ArrowRight',
+    UP : 'ArrowUp',
+    DOWN : 'ArrowDown',
+    SPACE : ' '
 };
 
 export const IMAGE_NAMES = {
@@ -15,8 +16,14 @@ export const IMAGE_NAMES = {
     SKIER_DOWN: 'skierDown',
     SKIER_RIGHTDOWN: 'skierRightDown',
     SKIER_RIGHT: 'skierRight',
+    SKIER_JUMP1: 'skierJump1',
+    SKIER_JUMP2: 'skierJump2',
+    SKIER_JUMP3: 'skierJump3',
+    SKIER_JUMP4: 'skierJump4',
+    SKIER_JUMP5: 'skierJump5',
     TREE: 'tree',
     TREE_CLUSTER: 'treeCluster',
+    JUMP_RAMP: 'jumpRamp',
     ROCK1: 'rock1',
     ROCK2: 'rock2',
     RHINO: 'rhino',
@@ -37,6 +44,12 @@ export const IMAGES = [
     { name: IMAGE_NAMES.SKIER_DOWN, url: 'img/skier_down.png' },
     { name: IMAGE_NAMES.SKIER_RIGHTDOWN, url: 'img/skier_right_down.png' },
     { name: IMAGE_NAMES.SKIER_RIGHT, url: 'img/skier_right.png' },
+    { name: IMAGE_NAMES.SKIER_JUMP1, url: 'img/skier_jump_1.png' },
+    { name: IMAGE_NAMES.SKIER_JUMP2, url: 'img/skier_jump_2.png' },
+    { name: IMAGE_NAMES.SKIER_JUMP3, url: 'img/skier_jump_3.png' },
+    { name: IMAGE_NAMES.SKIER_JUMP4, url: 'img/skier_jump_4.png' },
+    { name: IMAGE_NAMES.SKIER_JUMP5, url: 'img/skier_jump_5.png' },
+    { name: IMAGE_NAMES.JUMP_RAMP, url: 'img/jump_ramp.png' },
     { name: IMAGE_NAMES.TREE, url: 'img/tree_1.png' },
     { name: IMAGE_NAMES.TREE_CLUSTER, url: 'img/tree_cluster.png' },
     { name: IMAGE_NAMES.ROCK1, url: 'img/rock_1.png' },
