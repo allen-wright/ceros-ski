@@ -16,12 +16,30 @@ const STARTING_SPEED = 1;
 
 /**
  * The different states the skier can be in.
- * @type {string}
+ * @type {string: string}
  */
 const STATE_SKIING = "skiing";
 const STATE_JUMPING = "jumping";
 const STATE_CRASHED = "crashed";
 const STATE_DEAD = "dead";
+
+/**
+ * The obstacles which cause the skier to initiate a jump when collided with.
+ * @type {Set}
+ */
+const JUMP_INITIATING_OBSTACLES = new Set([
+    IMAGE_NAMES.JUMP_RAMP
+]);
+
+/**
+ * The obstacles which the skier can dodge when in the jumping state.
+ * @type {Set}
+ */
+const JUMPABLE_OBSTACLES = new Set([
+    IMAGE_NAMES.JUMP_RAMP,
+    IMAGE_NAMES.ROCK1,
+    IMAGE_NAMES.ROCK2,
+])
 
 /**
  * The different directions the skier can be facing.
@@ -137,8 +155,18 @@ export class Skier extends Entity {
         this.animations[STATE_JUMPING] = new Animation(
             IMAGES_JUMPING,
             false,
-            null
+            this.finishJumping.bind(this)
         );
+    }
+
+    /**
+     * Set the state and then set a new current animation based upon that state.
+     *
+     * @param {string} newState
+     */
+    setState(newState) {
+        this.state = newState;
+        this.setAnimation();
     }
 
     /**
@@ -196,10 +224,14 @@ export class Skier extends Entity {
     /**
      * Move the skier and check to see if they've hit an obstacle. The skier only moves in the skiing state.
      */
-    update() {
+    update(gameTime) {
         if (this.isJumping() || this.isSkiing()) {
             this.move();
             this.checkIfHitObstacle();
+        }
+
+        if (this.isJumping()) {
+            this.animate(gameTime);
         }
     }
 
@@ -310,6 +342,8 @@ export class Skier extends Entity {
             case KEYS.DOWN:
                 this.turnDown();
                 break;
+            case KEYS.SPACE:
+                this.jump();
             default:
                 handled = false;
         }
@@ -378,6 +412,93 @@ export class Skier extends Entity {
     }
 
     /**
+     * Advance to the next frame in the current animation if enough time has elapsed since the previous frame.
+     *
+     * @param {number} gameTime
+     */
+     animate(gameTime) {
+        if(!this.curAnimation) {
+            return;
+        }
+
+        if(gameTime - this.curAnimationFrameTime > ANIMATION_FRAME_SPEED_MS) {
+            this.nextAnimationFrame(gameTime);
+        }
+    }
+
+    /**
+     * Increase the current animation frame and update the image based upon the sequence of images for the animation.
+     * If the animation isn't looping, then finish the animation instead.
+     *
+     * @param {number} gameTime
+     */
+    nextAnimationFrame(gameTime) {
+        const animationImages = this.curAnimation.getImages();
+
+        this.curAnimationFrameTime = gameTime;
+        this.curAnimationFrame++;
+        if (this.curAnimationFrame >= animationImages.length) {
+            if(!this.curAnimation.getLooping()) {
+                this.finishAnimation();
+                return;
+            }
+
+            this.curAnimationFrame = 0;
+        }
+
+        this.imageName = animationImages[this.curAnimationFrame];
+    }
+
+    /**
+     * The current animation wasn't looping, so finish it by clearing out the current animation and firing the callback.
+     */
+    finishAnimation() {
+        const animationCallback = this.curAnimation.getCallback();
+        this.curAnimation = null;
+
+        animationCallback.apply();
+    }
+
+    /**
+     * Set the current animation, reset to the beginning of the animation and set the proper image to display.
+     */
+    setAnimation() {
+        this.curAnimation = this.animations[this.state];
+        if(!this.curAnimation) {
+            return;
+        }
+
+        this.curAnimationFrame = 0;
+
+        const animateImages = this.curAnimation.getImages();
+        this.imageName = animateImages[this.curAnimationFrame];
+    }
+
+    /**
+     * Make the skier jump. If they're crashed or currently jumping then do nothing, as we do not
+     * want to allow infinitely-recurring jumps.
+     */
+    jump() {
+        if(this.isCrashed() || this.isJumping()) {
+            return;
+        }
+
+        this.setState(STATE_JUMPING);
+    }
+
+    /**
+     * Callback to be fired after the jumping animation is finished. Returns the skier to the skiing
+     * state.
+     */
+    finishJumping() {
+        if(this.isCrashed()) {
+            return;
+        }
+
+        this.state = STATE_SKIING;
+    }
+
+    /**
      * The skier has a bit different bounds calculating than a normal entity to make the collision with obstacles more
      * natural. We want te skier to end up in the obstacle rather than right above it when crashed, so move the bottom
      * boundary up.
@@ -395,7 +516,9 @@ export class Skier extends Entity {
     }
 
     /**
-     * Go through all the obstacles in the game and see if the skier collides with any of them. If so, crash the skier.
+     * Go through all the obstacles in the game and see if the skier collides with any of them. If so, determine
+     * if the obstacle can initiate a jump, or can be jumped over while the skier is in the jumping state. If neither
+     * apply, crash the skier.
      */
     checkIfHitObstacle() {
         const skierBounds = this.getBounds();
@@ -407,7 +530,14 @@ export class Skier extends Entity {
         });
 
         if(collision) {
-            this.crash();
+            const obstacle = collision.imageName;
+            if (this.isJumping() && JUMPABLE_OBSTACLES.has(obstacle)) {
+                return;
+            } else if (this.isSkiing() && JUMP_INITIATING_OBSTACLES.has(obstacle)) {
+                this.jump();
+            } else {
+                this.crash();
+            }
         }
     }
 
@@ -439,17 +569,5 @@ export class Skier extends Entity {
     die() {
         this.state = STATE_DEAD;
         this.speed = 0;
-    }
-
-    setAnimation() {
-        this.curAnimation = this.animations[this.state];
-        if(!this.curAnimation) {
-            return;
-        }
-
-        this.curAnimationFrame = 0;
-
-        const animateImages = this.curAnimation.getImages();
-        this.imageName = animateImages[this.curAnimationFrame];
     }
 }
