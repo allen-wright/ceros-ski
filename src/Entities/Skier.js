@@ -495,7 +495,7 @@ export class Skier extends Entity {
             return;
         }
 
-        this.state = STATE_SKIING;
+        this.setState(STATE_SKIING);
     }
 
     /**
@@ -546,7 +546,7 @@ export class Skier extends Entity {
      * image.
      */
     crash() {
-        this.state = STATE_CRASHED;
+        this.setState(STATE_CRASHED);
         this.speed = 0;
         this.imageName = IMAGE_NAMES.SKIER_CRASH;
     }
@@ -558,7 +558,7 @@ export class Skier extends Entity {
      * @param {number} newDirection
      */
     recoverFromCrash(newDirection) {
-        this.state = STATE_SKIING;
+        this.setState(STATE_SKIING);
         this.speed = STARTING_SPEED;
         this.setDirection(newDirection);
     }
@@ -567,7 +567,7 @@ export class Skier extends Entity {
      * Kill the skier by putting them into the "dead" state and stopping their movement.
      */
     die() {
-        this.state = STATE_DEAD;
+        this.setState(STATE_DEAD);
         this.speed = 0;
     }
 }
