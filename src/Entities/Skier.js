@@ -19,7 +19,7 @@ const STARTING_SPEED = 1;
  * @type {string}
  */
 const STATE_SKIING = "skiing";
-const STATE_JUMPING = 'jumping';
+const STATE_JUMPING = "jumping";
 const STATE_CRASHED = "crashed";
 const STATE_DEAD = "dead";
 
@@ -32,6 +32,19 @@ const DIRECTION_LEFT_DOWN = 1;
 const DIRECTION_DOWN = 2;
 const DIRECTION_RIGHT_DOWN = 3;
 const DIRECTION_RIGHT = 4;
+
+/**
+ * Sequences of images that comprise the animations for the different states of the skier.
+ * @type {string[]}
+ */
+
+const IMAGES_JUMPING = [
+    IMAGE_NAMES.SKIER_JUMP1,
+    IMAGE_NAMES.SKIER_JUMP2,
+    IMAGE_NAMES.SKIER_JUMP3,
+    IMAGE_NAMES.SKIER_JUMP4,
+    IMAGE_NAMES.SKIER_JUMP5,
+];
 
 /**
  * Mapping of the image to display for the skier based upon which direction they're facing.
@@ -71,6 +84,31 @@ export class Skier extends Entity {
     speed = STARTING_SPEED;
 
     /**
+     * Stores all of the animations available for the different states of the skier.
+     * @type {Animation[]}
+     */
+    animations = [];
+    
+    /**
+     * The animation that the skier is currently using. Should be null unless the skier is in the jumping state,
+     * as it is the only current animation the player doesn't have control over.
+     * @type {Animation}
+     */
+    curAnimation = null;
+
+    /**
+     * The current frame of the current animation the skier is on.
+     * @type {number}
+     */
+    curAnimationFrame = 0;
+
+    /**
+     * The time in ms of the last frame change. Used to provide a consistent framerate.
+     * @type {number}
+     */
+    curAnimationFrameTime = Date.now();
+
+    /**
      * Stored reference to the ObstacleManager
      * @type {ObstacleManager}
      */
@@ -87,8 +125,20 @@ export class Skier extends Entity {
      */
     constructor(x, y, imageManager, obstacleManager, canvas) {
         super(x, y, imageManager, canvas);
-
         this.obstacleManager = obstacleManager;
+        this.setupAnimations();
+        this.setAnimation();
+    }
+
+    /**
+     * Create and store the animations.
+     */
+    setupAnimations() {
+        this.animations[STATE_JUMPING] = new Animation(
+            IMAGES_JUMPING,
+            false,
+            null
+        );
     }
 
     /**
@@ -381,5 +431,17 @@ export class Skier extends Entity {
     die() {
         this.state = STATE_DEAD;
         this.speed = 0;
+    }
+
+    setAnimation() {
+        this.curAnimation = this.animations[this.state];
+        if(!this.curAnimation) {
+            return;
+        }
+
+        this.curAnimationFrame = 0;
+
+        const animateImages = this.curAnimation.getImages();
+        this.imageName = animateImages[this.curAnimationFrame];
     }
 }
