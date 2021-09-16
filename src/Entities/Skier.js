@@ -151,6 +151,14 @@ export class Skier extends Entity {
     }
 
     /**
+     * Is the skier currently in the jumping state
+     * @returns {boolean}
+     */
+    isJumping() {
+        return this.state === STATE_JUMPING;
+    }
+
+    /**
      * Is the skier currently in the skiing state
      *
      * @returns {boolean}
@@ -189,7 +197,7 @@ export class Skier extends Entity {
      * Move the skier and check to see if they've hit an obstacle. The skier only moves in the skiing state.
      */
     update() {
-        if(this.isSkiing()) {
+        if (this.isJumping() || this.isSkiing()) {
             this.move();
             this.checkIfHitObstacle();
         }
