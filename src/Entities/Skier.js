@@ -11,7 +11,7 @@ import { intersectTwoRects, Rect } from "../Core/Utils";
  * The skier starts running at this speed. Saved in case speed needs to be reset at any point.
  * @type {number}
  */
-const STARTING_SPEED = 10;
+const STARTING_SPEED = 1;
 
 /**
  * The different states the skier can be in.
