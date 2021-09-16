@@ -1,5 +1,11 @@
 # Ceros Ski Code Challenge
 
+## Changes
+My adjustments and additions to the code have been detailed [here](changes.md). It can be deployed locally using the original sequence below, but it is also deployed on my server here: https://www.allenwright.dev/ceros
+
+<br>
+
+## Challenge
 Welcome to the Ceros Code Challenge - Ski Edition!
 
 For this challenge, we have included some base code for Ceros Ski, our version of the classic Windows game SkiFree. If
