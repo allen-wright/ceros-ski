@@ -223,6 +223,7 @@ export class Skier extends Entity {
 
     /**
      * Move the skier and check to see if they've hit an obstacle. The skier only moves in the skiing state.
+     * 
      * @param {number} gameTime
      */
     update(gameTime) {
