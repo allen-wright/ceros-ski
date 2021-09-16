@@ -3,8 +3,9 @@
  * angles, and crashes into obstacles they run into. If caught by the rhino, the skier will get eaten and die.
  */
 
-import { IMAGE_NAMES, DIAGONAL_SPEED_REDUCER, KEYS } from "../Constants";
+import { IMAGE_NAMES, DIAGONAL_SPEED_REDUCER, KEYS, ANIMATION_FRAME_SPEED_MS } from "../Constants";
 import { Entity } from "./Entity";
+import { Animation } from "../Core/Animation";
 import { intersectTwoRects, Rect } from "../Core/Utils";
 
 /**
@@ -18,6 +19,7 @@ const STARTING_SPEED = 1;
  * @type {string}
  */
 const STATE_SKIING = "skiing";
+const STATE_JUMPING = 'jumping';
 const STATE_CRASHED = "crashed";
 const STATE_DEAD = "dead";
 
