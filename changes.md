@@ -11,6 +11,11 @@ A production deployment of my version of the challenge can be found here: https:
 * While in the jumping state, the skier **cannot** initiate another jump (as this would allow infinite jumps, making only trees a threat)
 * The skier can still move while jumping
 
+## Start and Reset Buttons
+* Start and reset buttons have been added to the game
+* Game will not start until Start button is clicked on, at which point the start button will hide
+* Reset button appears only after the skier is dead, and disappears once clicked on
+
 ## Game Speed
 
 * Game speed has been drastically reduced (from 10 -> 1), as it felt far too fast on my local machine (tested on Chrome/Firefox) - this applies to both the skier and the rhino
