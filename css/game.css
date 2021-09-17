@@ -12,11 +12,14 @@ html, body {
 }
 
 button {
+    border: none;
+    font-size: 34px;
+    width: 200px;
     position: absolute;
     z-index: 1;
-    margin: auto;
-    left: 0;
-    right: 0;
+    top: 25%;  
+    left: 50%; 
+    transform: translate(-25%, -50%);
     text-align: center;
     visibility: hidden;
 }

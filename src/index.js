@@ -5,6 +5,12 @@
 import '../css/game.css';
 import { Game } from './Core/Game.js';
 
+const startButton = document.getElementById('start');
+startButton.addEventListener('click', () => {
+    startButton.style.visibility = 'hidden';
+    loadGame();
+});
+
 const resetButton = document.getElementById('reset');
 resetButton.addEventListener('click', loadGame);
 
@@ -14,6 +20,6 @@ async function loadGame() {
     skiGame.run();
 }
 
-document.addEventListener("DOMContentLoaded", async () => {
-    await loadGame();
+document.addEventListener('DOMContentLoaded', async () => {
+    startButton.style.visibility = 'visible';
 });

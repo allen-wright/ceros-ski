@@ -24,6 +24,11 @@ export class Game {
     gameTime = Date.now();
 
     /**
+     * Holds a reference to the reset button for the game.
+     */
+    resetButton = document.getElementById('reset');
+
+    /**
      * Initialize the game and setup any input handling needed.
      */
     constructor() {
@@ -123,17 +128,15 @@ export class Game {
      * 
      */
     drawResetButton() {
-        const resetButton = document.getElementById('reset');
-        resetButton.style.visibility = 'visible';
+        this.resetButton.style.visibility = 'visible';
     }
 
     /**
-     * Draws a reset button on the screen, allowing the player to reset the game.
+     * Hides the reset button.
      * 
      */
     hideResetButton() {
-        const resetButton = document.getElementById('reset');
-        resetButton.style.visibility = 'hidden';
+        this.resetButton.style.visibility = 'hidden';
     }
 
     /**
