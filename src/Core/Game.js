@@ -80,13 +80,19 @@ export class Game {
     updateGameWindow() {
         this.gameTime = Date.now();
 
-        const previousGameWindow = this.gameWindow;
+        const previousGameWindow = this.gameWindow ? this.gameWindow : null;
         this.calculateGameWindow();
 
         this.obstacleManager.placeNewObstacle(this.gameWindow, previousGameWindow);
 
         this.skier.update(this.gameTime);
         this.rhino.update(this.gameTime, this.skier);
+
+        if (this.skier.isDead()) {
+            this.drawResetButton();
+        } else {
+            this.hideResetButton();
+        }
     }
 
     /**
@@ -95,7 +101,6 @@ export class Game {
      */
     drawGameWindow() {
         this.canvas.setDrawOffset(this.gameWindow.left, this.gameWindow.top);
-
         this.skier.draw();
         this.rhino.draw();
         this.obstacleManager.drawObstacles();
@@ -111,6 +116,24 @@ export class Game {
         const top = skierPosition.y - (GAME_HEIGHT / 2);
 
         this.gameWindow = new Rect(left, top, left + GAME_WIDTH, top + GAME_HEIGHT);
+    }
+
+    /**
+     * Draws a reset button on the screen, allowing the player to reset the game.
+     * 
+     */
+    drawResetButton() {
+        const resetButton = document.getElementById('reset');
+        resetButton.style.visibility = 'visible';
+    }
+
+    /**
+     * Draws a reset button on the screen, allowing the player to reset the game.
+     * 
+     */
+    hideResetButton() {
+        const resetButton = document.getElementById('reset');
+        resetButton.style.visibility = 'hidden';
     }
 
     /**

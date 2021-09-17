@@ -5,8 +5,15 @@
 import '../css/game.css';
 import { Game } from './Core/Game.js';
 
-document.addEventListener("DOMContentLoaded",async () => {
+const resetButton = document.getElementById('reset');
+resetButton.addEventListener('click', loadGame);
+
+async function loadGame() {
     const skiGame = new Game();
     await skiGame.load();
     skiGame.run();
+}
+
+document.addEventListener("DOMContentLoaded", async () => {
+    await loadGame();
 });
